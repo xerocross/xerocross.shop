@@ -1,4 +1,4 @@
-import ShoppingTotal from "./components/shopping-total.vue";
+import {ShoppingTotal} from "./index.js";
 import Vue from "vue";
 
 Vue.config.errorHandler = function (err, vm, info)  {

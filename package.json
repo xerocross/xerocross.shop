@@ -1,12 +1,12 @@
 {
-  "name": "vue-project-template",
-  "version": "0.0.1",
+  "name": "xerocross.shop",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "cross-env NODE_ENV=dev webpack; node app.js",
+    "dev": "cross-env NODE_ENV=dev node app.js",
     "local": "cross-env NODE_ENV=local webpack-dev-server --hot --inline",
     "start": "node app.js"
   },

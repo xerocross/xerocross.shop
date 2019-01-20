@@ -4,12 +4,16 @@ const webpack = require('webpack')
 
 module.exports = [{
     entry : {
-        'shopping-total' : './src/shopping-total.js'
+        'shopping-total' : './src/shopping-total.js',
+        'index' : './src/index.js'
     },
     output : {
         path : path.resolve(__dirname, './dist'),
         publicPath : '/dist',
         filename : '[name].js',
+        library : 'xerocross.shop',
+        libraryTarget : 'umd',
+        umdNamedDefine : true
     },
     externals : {
         vue : "Vue" // remove this line if you want to bundle vue with the script
