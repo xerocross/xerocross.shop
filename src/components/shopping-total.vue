@@ -1,7 +1,5 @@
 <template>
     <div class="shopping-total">
-        <h1>Shopping Total</h1>
-
         <div>
             <form @submit.prevent = "addNewItem">
                 <label>
@@ -104,6 +102,9 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div>
+            <a href="https://github.com/xerocross/xerocross.shop">https://github.com/xerocross/xerocross.shop</a>
         </div>
     </div>
 </template>
