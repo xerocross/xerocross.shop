@@ -25,7 +25,7 @@
                     </option>
                 </select>
                 <label>
-                    Price
+                    Price Per Each
                 </label>
                 <num-enter 
                     :num-accepted = "numAccepted"
@@ -43,9 +43,10 @@
         </div>
         <div class="total">Total (before tax): <span 
             ref = "total-num" 
-            class="total-num">{{ runningTotal }}</span></div>
+            class="total-num">{{ runningTotal }}</span>
+        </div>
         <div class="item-list-outer panel panel-primary">
-            <div class="panel-heading">Stuff in Cart</div>
+            <div class="panel-heading">Shopping Cart</div>
             <div class="panel-body">
                 <ul class="list-group">
                     <li 
@@ -104,13 +105,28 @@
             </div>
         </div>
         <div>
-            <a href="https://github.com/xerocross/xerocross.shop">https://github.com/xerocross/xerocross.shop</a>
+            <h2>Backup and Recovery</h2>
+            <a 
+                ref = "download" 
+                class="btn btn-default">
+                download backup
+            </a>
+            <a 
+                class="btn btn-default" 
+                @click.prevent = "clickUpload">upload from backup</a>
+            <input 
+                ref = "fileInput"
+                style = "display:none"
+                type="file"
+                name = "model" 
+                @change = "startRead"
+            />
         </div>
     </div>
 </template>
 <script>
 import {sum} from "../helpers/sum.js";
-import StoreLocal from "../helpers/store-local.js";
+import { StoreLocal } from "cross-js-base"
 import NumEnter from "./num-enter.vue";
 
 export default {
@@ -161,7 +177,8 @@ export default {
             setTimeout(function(){
                 self.$refs["total-num"].style.backgroundColor = "transparent";
             },2000);
-        }
+        },
+
     },
     mounted () {
         this.storeLocal = StoreLocal.build("shopping-total");
@@ -171,18 +188,98 @@ export default {
         updateNum (newNum) {
             this.newItemPrice = newNum;
         },
-        addNewItem () {
-            let newItem = {
-                key : performance.now() + this.newItemName,
-                name : this.newItemName,
-                price : parseFloat(this.newItemPrice),
-                quantity : this.newItemQuantity,
-                isCounted : true
+        clickUpload () {
+            this.$refs.fileInput.click();
+        },
+        startRead (evt) {
+            var file = this.$refs.fileInput.files[0];
+            if (file) {
+                this.getAsText(file);
+            }
+            evt.stopPropagation();
+            evt.preventDefault();
+        },
+        getAsText(readFile) {
+            var reader = new FileReader();
+            reader.readAsText(readFile, "UTF-8");
+            reader.onload = this.loaded;
+        },
+        loaded(evt) {
+            let self = this;
+            var fileString = evt.target.result;
+            setTimeout(function(){
+                self.uploadFromBackup(fileString);
+            },0);
+        },
+        uploadFromBackup (fileString) {
+            try {
+                let dataArray = JSON.parse(fileString);
+                for (let i = 0; i < dataArray.length; i++) {
+                    let item = dataArray[i];
+                    if (this.listItems[item.key] == undefined) {
+                        this.addNewItem({
+                            key : item.key,
+                            name : item.name,
+                            price : item.price,
+                            quantity : item.quantity,
+                            isCounted : true
+                        });
+                    }
+                }
+                let ctrl = this.$refs.fileInput;
+                try {
+                    ctrl.value = null;
+                } catch(ex) {
+                    //do nothing
+                }
+                if (ctrl.value) {
+                    ctrl.parentNode.replaceChild(ctrl.cloneNode(true), ctrl);
+                }
+            }
+            catch (e) {
+                alert(`Could not parse the file.  We can only accept files 
+                formatted exactly as backup files generated from this app.`);
+            }
+        },
+        updateDownload () {
+            let filename = "myShoppingList.txt";
+            let text = this.exportData();
+            let downloadButton = this.$refs.download;
+            downloadButton.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            downloadButton.setAttribute('download', filename);
+        },
+        exportData () {
+            let items = this.itemsArray;
+            let cleanJsonData = [];
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
+                cleanJsonData.push({
+                    key : item.key,
+                    name : item.name,
+                    price : item.price,
+                    quantity : item.quantity
+                });
+            }
+            return JSON.stringify(cleanJsonData);
+        },
+        addNewItem (item) {
+            let newItem;
+            if (item) {
+                newItem = item;
+            } else {
+                newItem = {
+                    key : performance.now() + this.newItemName,
+                    name : this.newItemName,
+                    price : parseFloat(this.newItemPrice),
+                    quantity : this.newItemQuantity,
+                    isCounted : true
+                }
             }
             this.$set(this.listItems, newItem.key, newItem);
             this.storeLocal.addItem(newItem.key, JSON.stringify(newItem));
             this.numAccepted++;
             this.clear();
+            this.updateDownload();
         },
         clear () {
             this.newItemName = "";
@@ -192,6 +289,7 @@ export default {
         removeItem (key) {
             this.$delete(this.listItems, key);
             this.storeLocal.removeItem(key);
+            this.updateDownload();
         },
         togglePreviewWithout (key) {
             this.listItems[key].isCounted = !this.listItems[key].isCounted;
@@ -205,9 +303,11 @@ export default {
                 }
                 this.$set(this.listItems, item.key, item);
             }
+            this.updateDownload();
         },
         changeQuantity(key, qty) {
             this.listItems[key].quantity = qty;
+            this.updateDownload();
         }
     }
 }
@@ -215,6 +315,7 @@ export default {
 <style lang = "scss">
 .shopping-total {
     font-size: 16pt;
+    padding-bottom:2em;
     h1 {
         text-align: center;
         font-size: 19pt;
