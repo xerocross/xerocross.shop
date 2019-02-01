@@ -217,7 +217,7 @@ export default {
                 for (let i = 0; i < dataArray.length; i++) {
                     let item = dataArray[i];
                     if (this.listItems[item.key] == undefined) {
-                        this.addNewItem({
+                        this.addItemFromBackup({
                             key : item.key,
                             name : item.name,
                             price : item.price,
@@ -262,18 +262,19 @@ export default {
             }
             return JSON.stringify(cleanJsonData);
         },
-        addNewItem (item) {
-            let newItem;
-            if (item) {
-                newItem = item;
-            } else {
-                newItem = {
-                    key : performance.now() + this.newItemName,
-                    name : this.newItemName,
-                    price : parseFloat(this.newItemPrice),
-                    quantity : this.newItemQuantity,
-                    isCounted : true
-                }
+        addItemFromBackup (item) {
+            this.$set(this.listItems, item.key, item);
+            this.storeLocal.addItem(item.key, JSON.stringify(item));
+            this.numAccepted++;
+            this.updateDownload();
+        },
+        addNewItem () {
+            let newItem = {
+                key : performance.now() + this.newItemName,
+                name : this.newItemName,
+                price : parseFloat(this.newItemPrice),
+                quantity : this.newItemQuantity,
+                isCounted : true
             }
             this.$set(this.listItems, newItem.key, newItem);
             this.storeLocal.addItem(newItem.key, JSON.stringify(newItem));
