@@ -62,7 +62,7 @@
 export default {
     props : {
         numAccepted : {
-            type : "number",
+            type : Number,
             default : 0
         }
     },

@@ -298,11 +298,18 @@ export default {
         buildFromStorage () {
             let list = this.storeLocal.getAll();
             for (let i = 0; i < list.length; i++) {
-                let item = JSON.parse(list[i]);
-                if (!item.quantity) {
-                    item.quantity = 1;
+                try {
+                    let item = JSON.parse(list[i]);
+                    if (item) {
+                        if (!item.quantity) {
+                            item.quantity = 1;
+                        }
+                        this.$set(this.listItems, item.key, item);
+                    }
+                } catch (e) {
+                    // most likely problem was JSON.parse, 
+                    // possibly because of corrupted data.
                 }
-                this.$set(this.listItems, item.key, item);
             }
             this.updateDownload();
         },

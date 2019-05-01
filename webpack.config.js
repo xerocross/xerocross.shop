@@ -74,6 +74,7 @@ module.exports = [{
         filename : '[name].js',
     },
     externals : {
+        vue : "Vue"
     },
     module : {
         rules : [
