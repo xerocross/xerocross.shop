@@ -3,57 +3,56 @@
         <input 
             v-model = "numberString" 
             type="text" 
-            class="num form-control">
+            class="num form-control num-enter-view">
         <div class = "num-row">
             <div class="num-item num-button">
                 <span 
-                    class="btn btn-default" 
+                    class="btn btn-default btn-7" 
                     @click = "pushNumber(7)">
                     7
                 </span>
             </div>
             <div class="num-item num-button">
                 <span 
-                    class="btn btn-default" 
+                    class="btn btn-default btn-8" 
                     @click = "pushNumber(8)">8
-
                 </span>
             </div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-9" 
                 @click = "pushNumber(9)">9</span></div>
         </div>
         <div class = "num-row">
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-4" 
                 @click = "pushNumber(4)">4</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-5" 
                 @click = "pushNumber(5)">5</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
-                @click = "pushNumber(4)">6</span></div>
+                class="btn btn-default btn-6" 
+                @click = "pushNumber(6)">6</span></div>
         </div>
         <div class = "num-row">
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-1" 
                 @click = "pushNumber(1)">1</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-2" 
                 @click = "pushNumber(2)">2</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-3" 
                 @click = "pushNumber(3)">3</span></div>
         </div>
         <div class = "num-row">
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-0" 
                 @click = "pushNumber(0)">0</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-dec" 
                 @click = "addDecimal">.</span></div>
             <div class="num-item num-button"><span 
-                class="btn btn-default" 
+                class="btn btn-default btn-c" 
                 @click = "clear">C</span></div>
         </div>
     </div>
