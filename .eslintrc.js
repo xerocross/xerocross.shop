@@ -3,17 +3,20 @@ module.exports = {
         "parser": "babel-eslint"
     },
     "env": {
-        browser: true,
-        commonjs: true,
-        node: true
+        "browser": true,
+        "commonjs": true,
+        "node": true,
+        "jest/globals": true
     },
+    "plugins": ["jest"],
     "extends": [
         "eslint:recommended",
         "plugin:vue/recommended"
     ],
-    rules: {
+    "rules": {
         "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
         "indent": ["error", 4],
+        "no-console": "off",
         "vue/html-indent": ["error", 4, {
             "attribute": 1,
             "closeBracket": 0,
@@ -27,7 +30,7 @@ module.exports = {
         }],
         "vue/html-self-closing" : [0]
     },
-    globals: {
+    "globals": {
         "NODE_ENV" : false
     }
 };
