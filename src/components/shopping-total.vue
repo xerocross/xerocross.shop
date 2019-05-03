@@ -110,7 +110,7 @@
             <h2>Backup and Recovery</h2>
             <a 
                 ref = "download" 
-                class="btn btn-default">
+                class="btn btn-default download-backup-button">
                 download backup
             </a>
             <a 
@@ -183,8 +183,14 @@ export default {
 
     },
     mounted () {
-        this.storeLocal = StoreLocal.build("shopping-total");
-        this.buildFromStorage();
+        try {
+            this.storeLocal = StoreLocal.build("shopping-total");
+            this.buildFromStorage();
+        }
+        catch(e) {
+            localStorage.removeItem("shopping-total");
+            this.storeLocal = StoreLocal.build("shopping-total");
+        }
     },
     methods : {
         updateNum (newNum) {

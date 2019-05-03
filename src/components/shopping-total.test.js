@@ -49,6 +49,9 @@ function getRunningTotal (shoppingTotal) {
 function getItemTotalPrice (item) {
     return item.find(".item-price-total");
 }
+function getDownloadBackupButton (shoppingTotal) {
+    return shoppingTotal.find(".download-backup-button");
+}
 
 beforeEach(()=> {
     localStorage.clear();
@@ -215,4 +218,31 @@ test("changing quantity updates price", function() {
     let item = items.at(0);
     getItemQuantityInput(item).setValue(2);
     expect(getItemTotalPrice(item).text()).toBe("4.24");
+});
+
+test("fully corrupt localstorage data is ignored and overwritten", () => {
+    localStorage.setItem("shopping-total", "corrupt data");// expected a
+    let shoppingTotal = shallowMount(ShoppingTotal);
+    let items = getShoppingItems(shoppingTotal);
+    expect(items.length).toBe(0);
+    addItem(shoppingTotal, "banana", "2.12", 1);
+    let shoppingTotal2 = shallowMount(ShoppingTotal);
+    expect(getShoppingItems(shoppingTotal2).length).toBe(1);
+});
+
+test("download button includes accurate incoded data", function() {
+    let shoppingTotal = shallowMount(ShoppingTotal);
+    addItem(shoppingTotal, "banana", "2.12", 2);
+    addItem(shoppingTotal, "apple", "5.19", 3);
+    let downloadButton = getDownloadBackupButton(shoppingTotal);
+    let data = downloadButton.attributes()["href"];
+    let initLen = "data:text/plain;charset=utf-8,".length;
+    data = decodeURIComponent(data.substring(initLen));
+    let dataArray = JSON.parse(data);
+    expect(dataArray[0].name).toBe("banana");
+    expect(dataArray[0].quantity).toBe(2);
+    expect(dataArray[0].price).toBe(2.12);
+    expect(dataArray[1].name).toBe("apple");
+    expect(dataArray[1].quantity).toBe(3);
+    expect(dataArray[1].price).toBe(5.19);
 });
