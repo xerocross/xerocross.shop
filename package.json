@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "build": "webpack",
     "dev": "cross-env NODE_ENV=dev node app.js",
     "local": "cross-env NODE_ENV=local webpack-dev-server --hot --inline",

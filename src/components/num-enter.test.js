@@ -89,3 +89,19 @@ test ("second decimal click has no effect (3)", () => {
     buttons.click("2");
     expect(wrapper.find(".num-enter-view").element.value).toBe(".52");
 });
+
+test ("emitting", () => {
+    const wrapper = mount(NumEnter);
+    const buttons = getButtons(wrapper);
+    buttons.click("2");
+    buttons.click("1");
+    buttons.click("5");
+    buttons.click("9");
+    buttons.click("0");
+    buttons.click("0");
+    buttons.click("dec");
+    buttons.click("0");
+    buttons.click("5");
+    let emitted = wrapper.emitted()["event_number"]; 
+    expect(emitted[emitted.length - 1][0]).toBe("215900.05");
+});

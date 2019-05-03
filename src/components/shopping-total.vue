@@ -1,7 +1,9 @@
 <template>
     <div class="shopping-total">
         <div>
-            <form @submit.prevent = "addNewItem">
+            <form 
+                class = "add-item-form" 
+                @submit.prevent = "addNewItem">
                 <label>
                     Name/Description
                 </label>
@@ -9,13 +11,13 @@
                 <input 
                     v-model = "newItemName"
                     type = "text"
-                    class = "form-control"
+                    class = "form-control new-item-name"
                     name = "name"
                 />
                 <label>Quantity</label>
                 <select 
                     v-model = "newItemQuantity" 
-                    class="form-control">
+                    class="form-control new-item-quantity">
                     <option 
                         v-for = "i in [1,2,3,4,5,6,7,8,9,10]" 
                         :key = "i" 
@@ -36,7 +38,7 @@
                     <input 
                         :disabled = "!isInputValid"
                         type = "submit"
-                        class = "btn btn-primary"
+                        class = "btn btn-primary submit-button"
                         value = "add" />
                 </div>
             </form>
@@ -48,7 +50,7 @@
         <div class="item-list-outer panel panel-primary">
             <div class="panel-heading">Shopping Cart</div>
             <div class="panel-body">
-                <ul class="list-group">
+                <ul class="list-group item-display-list">
                     <li 
                         v-for = "item in itemsArray"
                         :key = "item.key"
@@ -59,13 +61,13 @@
                             :class = "item.isCounted ? '' : 'preview-without'"
                             class="item-name"
                         >
-                            {{ item.name }}<br> 
-                            {{ item.price.toFixed(2) }}
+                            <span class="item-name-text">{{ item.name }}</span><br> 
+                            <span class="item-price-per-each">{{ item.price.toFixed(2) }}</span>
                             <span>&times;</span>
                             <span>
                                 <select 
                                     v-model = "item.quantity"
-                                    class="form-control"
+                                    class="form-control item-quantity-view"
                                     style = "display: inline"
                                 >
                                     <option 
@@ -81,14 +83,14 @@
                         
                         <div 
                             :class = "item.isCounted ? '' : 'preview-without'"
-                            class="item-price"
+                            class="item-price item-price-total"
                         >
                             {{ (item.price*item.quantity).toFixed(2) }}
                         </div>
                         <div class="end">
                             <button 
                                 :class = "item.isCounted ? 'btn-info' : 'btn-success'"
-                                class="btn"
+                                class="btn maybe-not-button"
                                 @click = "togglePreviewWithout(item.key)">
                                 {{ item.isCounted ? "maybe not?" : "keep" }}
                             </button>
