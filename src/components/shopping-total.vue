@@ -110,11 +110,12 @@
             <h2>Backup and Recovery</h2>
             <a 
                 ref = "download" 
-                class="btn btn-default download-backup-button">
+                class="btn btn-secondary download-backup-button">
                 download backup
             </a>
             <a 
-                class="btn btn-default" 
+                class="btn btn-secondary"
+                href = "#" 
                 @click.prevent = "clickUpload">upload from backup</a>
             <input 
                 ref = "fileInput"
